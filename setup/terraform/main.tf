@@ -74,7 +74,7 @@ resource "aws_route_table_association" "private" {
 
 # Create EKS endpoint for private access
 resource "aws_vpc_endpoint" "eks" {
-  count               = var.enable_private == true ? 1 : 0 # only enable when private
+  count               = var.enable_private == true ? 1 : 0
   vpc_id              = aws_vpc.vpc.id
   service_name        = "com.amazonaws.us-east-1.eks"
   vpc_endpoint_type   = "Interface"
@@ -152,7 +152,6 @@ resource "aws_eks_cluster" "main" {
   depends_on = [aws_iam_role_policy_attachment.eks_cluster, aws_iam_role_policy_attachment.eks_service]
 }
 
-
 # Create an IAM role for the EKS cluster
 resource "aws_iam_role" "eks_cluster" {
   name = "eks_cluster_role"
@@ -182,22 +181,16 @@ resource "aws_iam_role_policy_attachment" "eks_service" {
   role       = aws_iam_role.eks_cluster.name
 }
 
-
 ##################
 # EKS Node Group
 ##################
-# Track latest release for the given k8s version
-data "aws_ssm_parameter" "eks_ami_release_version" {
-  name = "/aws/service/eks/optimized-ami/${aws_eks_cluster.main.version}/amazon-linux-2/recommended/release_version"
-}
-
 resource "aws_eks_node_group" "main" {
   node_group_name = "udacity"
   cluster_name    = aws_eks_cluster.main.name
   version         = aws_eks_cluster.main.version
   node_role_arn   = aws_iam_role.node_group.arn
   subnet_ids      = [var.enable_private == true ? aws_subnet.private_subnet.id : aws_subnet.public_subnet.id]
-  release_version = nonsensitive(data.aws_ssm_parameter.eks_ami_release_version.value)
+  ami_type        = "AL2023_x86_64_STANDARD"
   instance_types  = ["t3.small"]
 
   scaling_config {
@@ -206,9 +199,6 @@ resource "aws_eks_node_group" "main" {
     min_size     = 1
   }
 
-
-  # Ensure that IAM Role permissions are created before and deleted after EKS Node Group handling.
-  # Otherwise, EKS will not be able to properly delete EC2 Instances and Elastic Network Interfaces.
   depends_on = [
     aws_iam_role_policy_attachment.node_group_policy,
     aws_iam_role_policy_attachment.cni_policy,
@@ -255,7 +245,6 @@ data "aws_iam_policy_document" "assume_role_policy" {
 ######################
 # CodeBuild Resources
 ######################
-# Create a CodeBuild project
 resource "aws_codebuild_project" "codebuild" {
   name          = "udacity"
   description   = "Udacity CodeBuild project"
@@ -285,7 +274,6 @@ resource "aws_codebuild_project" "codebuild" {
   }
 }
 
-# Create the Codebuild Role
 resource "aws_iam_role" "codebuild" {
   name = "codebuild-role"
 
@@ -303,7 +291,6 @@ resource "aws_iam_role" "codebuild" {
   })
 }
 
-# Attach the IAM policy to the codebuild role
 resource "aws_iam_role_policy_attachment" "codebuild" {
   policy_arn = "arn:aws:iam::aws:policy/AWSCodeBuildAdminAccess"
   role       = aws_iam_role.codebuild.name
@@ -324,7 +311,7 @@ resource "aws_iam_user_policy" "github_action_user_permission" {
 data "aws_iam_policy_document" "github_policy" {
   statement {
     effect    = "Allow"
-    actions   = ["ecr:*", "eks:*", "ec2:*", "iam:GetUser"]
+    actions   = ["ecr:*", "eks:*", "ec2:*"]
     resources = ["*"]
   }
 }
