@@ -15,7 +15,6 @@ export default function App() {
       <h1>Movie List</h1>
 
       <MovieList onMovieClick={handleMovieClick} />
-      // Display movie details if a movie is selected
       {selectedMovie && (
         <>
           <h1>Movie Details</h1>
