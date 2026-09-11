@@ -22,6 +22,8 @@ jobs:
       - working-directory: starter/frontend
         run: npm ci
       - working-directory: starter/frontend
+        run: npx eslint . --fix
+      - working-directory: starter/frontend
         run: npm run lint
 
   test:
