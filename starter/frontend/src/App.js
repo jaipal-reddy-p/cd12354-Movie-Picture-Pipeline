@@ -5,7 +5,7 @@ import './App.css';
 
 export default function App() {
   const [selectedMovie, setSelectedMovie] = useState(null);
-
+  //testing CI
   const handleMovieClick = (movie) => {
     setSelectedMovie(movie);
   };
@@ -25,4 +25,3 @@ export default function App() {
     </div>
   );
 }
-//testing
