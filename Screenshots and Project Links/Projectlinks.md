@@ -18,7 +18,7 @@ The application has a frontend and backend. The CI/CD pipeline automatically bui
 
 | Resource | URL |
 |---|---|
-| Frontend | `http://a1dad6b332a124b559c59c9051c1266e-19045908.us-east-1.elb.amazonaws.com/`   
+| Frontend | ``   
 | Backend API | `http://a3f1f680e861d400886a3d18a272a815-1407658236.us-east-1.elb.amazonaws.com/movies`
 | GitHub Repository | `https://github.com/jaipal-reddy-p/cd12354-Movie-Picture-Pipeline.git`
 
