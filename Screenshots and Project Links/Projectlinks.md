@@ -1,4 +1,4 @@
-# 🎬 Movies App – CI/CD Project
+<img width="959" height="539" alt="image" src="https://github.com/user-attachments/assets/f3600f73-c384-441e-a611-473ce05be19f" /># 🎬 Movies App – CI/CD Project
 
 ## About the Project
 
@@ -19,7 +19,7 @@ The application has a frontend and backend. The CI/CD pipeline automatically bui
 | Resource | URL |
 |---|---|
 | Frontend | `http://a1dad6b332a124b559c59c9051c1266e-19045908.us-east-1.elb.amazonaws.com/`   
-| Backend API | `http://a7fd47a52903a488b8270d86faad8fa6-823327457.us-east-1.elb.amazonaws.com/movies`
+| Backend API | `http://a3f1f680e861d400886a3d18a272a815-1407658236.us-east-1.elb.amazonaws.com/movies`
 | GitHub Repository | `https://github.com/jaipal-reddy-p/cd12354-Movie-Picture-Pipeline.git`
 
 ## CI/CD Flow
