@@ -62,11 +62,13 @@ jobs:
       - id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - working-directory: starter/frontend
+      - name: Build and push frontend image
+        working-directory: starter/frontend
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
-          REACT_APP_MOVIE_API_URL: ${{ secrets.REACT_APP_MOVIE_API_URL }}
+          # Backend load balancer address: no trailing slash, no port, no /movies
+          REACT_APP_MOVIE_API_URL: http://a3f1f680e861d400886a3d18a272a815-1407658236.us-east-1.elb.amazonaws.com
         run: |
           docker build \
             --build-arg REACT_APP_MOVIE_API_URL=$REACT_APP_MOVIE_API_URL \
@@ -77,7 +79,8 @@ jobs:
 
       - uses: imranismail/setup-kustomize@v2
 
-      - working-directory: starter/frontend/k8s
+      - name: Deploy to EKS
+        working-directory: starter/frontend/k8s
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
@@ -85,3 +88,4 @@ jobs:
           aws eks update-kubeconfig --name $EKS_CLUSTER --region $AWS_REGION
           kustomize edit set image frontend=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           kustomize build . | kubectl apply -f -
+          kubectl rollout status deployment/frontend
