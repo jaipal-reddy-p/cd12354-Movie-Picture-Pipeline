@@ -1,4 +1,4 @@
-<img width="959" height="539" alt="image" src="https://github.com/user-attachments/assets/f3600f73-c384-441e-a611-473ce05be19f" /># 🎬 Movies App – CI/CD Project
+# 🎬 Movies App – CI/CD Project
 
 ## About the Project
 
